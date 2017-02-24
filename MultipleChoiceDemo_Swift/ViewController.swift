@@ -10,8 +10,8 @@ import UIKit
 
 class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource {
 
-    let SCREEN_WIDTH = UIScreen.mainScreen().bounds.size.width
-    let SCREEN_HEIGHT = UIScreen.mainScreen().bounds.size.height
+    let SCREEN_WIDTH = UIScreen.main.bounds.size.width
+    let SCREEN_HEIGHT = UIScreen.main.bounds.size.height
     
     var datas: NSArray = NSArray()
     var tableView: UITableView = UITableView()
@@ -22,28 +22,28 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
         
         self.title = "Swift学习Demo"
         
-        tableView.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT-64)
+        tableView.frame = CGRect(x: 0, y: 0, width: SCREEN_WIDTH, height: SCREEN_HEIGHT-64)
         tableView.delegate = self
         tableView.dataSource = self
         tableView.tableFooterView = UIView()
-        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         self.view.addSubview(tableView)
         
         datas = ["多选","其他"]
     }
 
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 2
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         cell.textLabel?.text = datas[indexPath.row]  as? String
         return cell
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         
         let vc: MultipleChoiceViewController = MultipleChoiceViewController()
         if indexPath.row == 0 {

@@ -10,24 +10,24 @@ import UIKit
 
 protocol CellDelegate: NSObjectProtocol {
     
-    func cellForSelect(isSelect: Bool, atIndexPath indexPath: NSIndexPath)
+    func cellForSelect(_ isSelect: Bool, atIndexPath indexPath: IndexPath)
 }
 
 class MultipleChoiceTableViewCell: UITableViewCell {
 
-    let SCREEN_WIDTH = UIScreen.mainScreen().bounds.size.width
-    let SCREEN_HEIGHT = UIScreen.mainScreen().bounds.size.height
+    let SCREEN_WIDTH = UIScreen.main.bounds.size.width
+    let SCREEN_HEIGHT = UIScreen.main.bounds.size.height
 
     var isSelecet: Bool = false
     var titleLabel: UILabel = UILabel()
     var selectBtn: UIButton = UIButton()
-    var indexPath: NSIndexPath = NSIndexPath()
+    var indexPath: IndexPath = IndexPath()
     
     //Delegate
     weak var delegate: CellDelegate?
     
     //Block
-    var CallBackBlock: ((select: Bool, indexPath: NSIndexPath) -> Void)!
+    var CallBackBlock: ((_ select: Bool, _ indexPath: IndexPath) -> Void)!
     
     var model: MultipleChoiceModel {
         get {
@@ -46,30 +46,30 @@ class MultipleChoiceTableViewCell: UITableViewCell {
         config()
     }
     
-    private func config() {
-        titleLabel.frame = CGRectMake(10, 10, 100, 30)
+    fileprivate func config() {
+        titleLabel.frame = CGRect(x: 10, y: 10, width: 100, height: 30)
         self.contentView.addSubview(titleLabel)
         
-        selectBtn.frame = CGRectMake(SCREEN_WIDTH-40, 7, 30, 30)
-        selectBtn.setImage(UIImage(named: "selected.png"), forState: .Normal)
-        selectBtn.addTarget(self, action: Selector("onBtnClick:"), forControlEvents: .TouchUpInside)
+        selectBtn.frame = CGRect(x: SCREEN_WIDTH-40, y: 7, width: 30, height: 30)
+        selectBtn.setImage(UIImage(named: "selected.png"), for: UIControlState())
+        selectBtn.addTarget(self, action: #selector(MultipleChoiceTableViewCell.onBtnClick(_:)), for: .touchUpInside)
         self.contentView.addSubview(selectBtn)
     }
     
-    func setBtnSelected(selected: Bool) {
+    func setBtnSelected(_ selected: Bool) {
         if selected {
-            selectBtn.setImage(UIImage(named: "selected.png"), forState: .Normal)
+            selectBtn.setImage(UIImage(named: "selected.png"), for: UIControlState())
         } else {
-            selectBtn.setImage(UIImage(named: "unselected.png"), forState: .Normal)
+            selectBtn.setImage(UIImage(named: "unselected.png"), for: UIControlState())
         }
     }
     
-    func onBtnClick(sender: UIButton) {
+    func onBtnClick(_ sender: UIButton) {
         isSelecet = !isSelecet
-        if delegate?.respondsToSelector("cellForSelect:") != nil {
+        if delegate?.responds(to: Selector(("cellForSelect:"))) != nil {
             delegate?.cellForSelect(isSelecet, atIndexPath: indexPath)
-        } else if CallBackBlock != nil {
-            CallBackBlock(select: isSelecet, indexPath: indexPath)
+//        } else if CallBackBlock != nil {
+//            CallBackBlock(select: isSelecet, indexPath: indexPath)
         }
     }
     
@@ -82,7 +82,7 @@ class MultipleChoiceTableViewCell: UITableViewCell {
         // Initialization code
     }
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
